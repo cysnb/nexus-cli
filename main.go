@@ -1,8 +1,10 @@
 package main
 
 import (
+	"crypto/tls"
 	"fmt"
 	"html/template"
+	"net/http"
 	"os"
 
 	"github.com/mlabouardy/nexus-cli/registry"
@@ -18,6 +20,11 @@ nexus_repository = "{{ .Repository }}"`
 )
 
 func main() {
+	http.DefaultClient.Transport = &http.Transport{
+		TLSClientConfig: &tls.Config{
+			InsecureSkipVerify: true,
+		},
+	}
 	app := cli.NewApp()
 	app.Name = "Nexus CLI"
 	app.Usage = "Manage Docker Private Registry on Nexus"
